@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, session
+from flask import Flask, session, render_template, request, redirect, url_for
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -11,7 +11,7 @@ API_KEY = "9if6Tul5OHosGNcHcNSNVw"
 app = Flask(__name__)
 
 res = requests.get("https://www.goodreads.com/book/review_counts.json",
-                   params={"key": "KEY", "isbns": "9781632168146"})
+                   params={"key": API_KEY, "isbns": "9781632168146"})
 print(res.json())
 
 # Check for environment variable
@@ -30,4 +30,12 @@ db = scoped_session(sessionmaker(bind=engine))
 
 @app.route("/")
 def index():
-    return "Project 1: TODO"
+    return "Hello World"
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        return redirect("/")
+    else:
+        return render_template("login.html")
